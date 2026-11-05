@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Hero preview · A and B</title>
+<link rel="icon" href="favicon.svg">
+<style>
+@font-face{font-family:GS;src:url(assets/home/fonts/gs-500.woff2) format("woff2");font-weight:500}
+@font-face{font-family:GS;src:url(assets/home/fonts/gs-600.woff2) format("woff2");font-weight:600}
+@font-face{font-family:PF;src:url(assets/home/fonts/playfair-i500-latin.woff2) format("woff2");font-style:italic;font-weight:500}
+*{box-sizing:border-box;margin:0}html,body{height:100%;background:#0b0b0a;color:#eee8dd;font:500 15px/1.4 GS,system-ui,sans-serif}
+.top{position:fixed;inset:0 0 auto;z-index:5;display:flex;align-items:center;gap:18px;padding:12px 20px;background:linear-gradient(#0b0b0a,rgba(11,11,10,.86));border-bottom:1px solid rgba(212,174,90,.22)}
+.top h1{font:600 16px GS;letter-spacing:.01em;white-space:nowrap}.top h1 em{font:italic 500 18px PF;color:#d4ae5a}
+.tabs{display:flex;gap:6px;margin-left:auto;background:rgba(238,232,221,.06);border-radius:999px;padding:4px}
+.tabs button{all:unset;cursor:pointer;padding:8px 16px;border-radius:999px;font:600 14px GS;color:rgba(238,232,221,.78);transition:background .35s,color .35s}
+.tabs button[aria-pressed=true]{background:#d4ae5a;color:#0b0b0a}
+.open{font:500 13px GS;color:rgba(238,232,221,.7);white-space:nowrap}.open a{color:#d4ae5a;text-decoration:none;margin-left:10px}
+.stage{position:fixed;inset:57px 0 0;display:flex;gap:14px;padding:14px}
+.pane{flex:1;display:flex;flex-direction:column;min-width:0}.pane .lab{font:600 13px GS;letter-spacing:.08em;text-transform:uppercase;color:#d4ae5a;margin:0 0 8px 2px}
+.pane .lab span{color:rgba(238,232,221,.6);letter-spacing:.02em;text-transform:none;font-weight:500;margin-left:8px}
+.fw{flex:1;position:relative;overflow:hidden;border-radius:10px;box-shadow:0 0 0 1px rgba(238,232,221,.12)}
+.fw iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#000}
+body.one .pane.off{display:none}
+@media (max-width:860px){.open,.top h1 span{display:none}.stage{padding:0;gap:0;inset:57px 0 0}.pane .lab{display:none}.fw{border-radius:0;box-shadow:none}}
+</style></head><body class="sbs">
+<div class="top"><h1>Hero <em>A</em> or <em>B</em><span>, jarrettwroten.com preview</span></h1>
+<div class="tabs" role="group" aria-label="View"><button data-v="sbs" aria-pressed="true">Side by side</button><button data-v="a" aria-pressed="false">A Current</button><button data-v="b" aria-pressed="false">B New</button></div>
+<div class="open">Full page:<a href="a.html" target="_blank">A</a><a href="b.html" target="_blank">B</a></div></div>
+<div class="stage">
+<div class="pane" id="pa"><p class="lab">A <span>Current live hero</span></p><div class="fw"><iframe title="Version A, current hero" src="a.html"></iframe></div></div>
+<div class="pane" id="pb"><p class="lab">B <span>New hero</span></p><div class="fw"><iframe title="Version B, new hero" src="b.html"></iframe></div></div>
+</div>
+<script>
+const W=1440,H=900,ph=matchMedia('(max-width:860px)');let mode=ph.matches?'b':'sbs';
+function fit(){document.querySelectorAll('.fw').forEach(f=>{const i=f.querySelector('iframe'),r=f.getBoundingClientRect();
+ if(ph.matches||mode!=='sbs'&&r.width<W*0.6){i.style.width=r.width+'px';i.style.height=r.height+'px';i.style.transform='none';return}
+ const vw=mode==='sbs'?W:r.width,s=r.width/vw;i.style.width=vw+'px';i.style.height=(r.height/s)+'px';i.style.transform='scale('+s+')'})}
+function set(m){if(ph.matches&&m==='sbs')m='b';mode=m;document.body.className=m==='sbs'?'sbs':'one';
+ document.querySelectorAll('.tabs button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.v===m);b.style.display=ph.matches&&b.dataset.v==='sbs'?'none':''});
+ document.getElementById('pa').classList.toggle('off',m==='b');document.getElementById('pb').classList.toggle('off',m==='a');fit()}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>set(b.dataset.v));
+addEventListener('resize',()=>set(mode));ph.addEventListener('change',()=>set(ph.matches?'b':'sbs'));set(mode);
+</script></body></html>
