@@ -12,7 +12,7 @@
 .tabs button[aria-pressed=true]{background:#d4ae5a;color:#0b0b0a}
 .open{font:500 13px GS;color:rgba(238,232,221,.7);white-space:nowrap}.open a{color:#d4ae5a;text-decoration:none;margin-left:10px}
 .stage{position:fixed;inset:57px 0 0;display:flex;gap:14px;padding:14px}
-.pane{flex:1;display:flex;flex-direction:column;min-width:0}.pane .lab{font:600 13px GS;letter-spacing:.08em;text-transform:uppercase;color:#d4ae5a;margin:0 0 8px 2px}
+.pane{flex:1;display:flex;flex-direction:column;min-width:0;justify-content:center}body.sbs .stage{align-items:center}.pane .lab{font:600 13px GS;letter-spacing:.08em;text-transform:uppercase;color:#d4ae5a;margin:0 0 8px 2px}
 .pane .lab span{color:rgba(238,232,221,.6);letter-spacing:.02em;text-transform:none;font-weight:500;margin-left:8px}
 .fw{flex:1;position:relative;overflow:hidden;border-radius:10px;box-shadow:0 0 0 1px rgba(238,232,221,.12)}
 .fw iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#000}
@@ -29,8 +29,7 @@ body.one .pane.off{display:none}
 <script>
 const W=1440,H=900,ph=matchMedia('(max-width:860px)');let mode=ph.matches?'b':'sbs';
 function fit(){document.querySelectorAll('.fw').forEach(f=>{const i=f.querySelector('iframe'),r=f.getBoundingClientRect();
- if(ph.matches||mode!=='sbs'&&r.width<W*0.6){i.style.width=r.width+'px';i.style.height=r.height+'px';i.style.transform='none';return}
- const vw=mode==='sbs'?W:r.width,s=r.width/vw;i.style.width=vw+'px';i.style.height=(r.height/s)+'px';i.style.transform='scale('+s+')'})}
+ if(mode==='sbs'){const st=document.querySelector('.stage').getBoundingClientRect(),s=Math.min(r.width/W,(st.height-50)/H);f.style.flex='none';f.style.width=W*s+'px';f.style.height=H*s+'px';i.style.width=W+'px';i.style.height=H+'px';i.style.transform='scale('+s+')';return}f.style.flex='';f.style.width='';f.style.height='';const R=f.getBoundingClientRect();i.style.width=R.width+'px';i.style.height=R.height+'px';i.style.transform='none'})}
 function set(m){if(ph.matches&&m==='sbs')m='b';mode=m;document.body.className=m==='sbs'?'sbs':'one';
  document.querySelectorAll('.tabs button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.v===m);b.style.display=ph.matches&&b.dataset.v==='sbs'?'none':''});
  document.getElementById('pa').classList.toggle('off',m==='b');document.getElementById('pb').classList.toggle('off',m==='a');fit()}
